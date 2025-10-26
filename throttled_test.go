@@ -15,8 +15,8 @@ func BenchmarkThrottled(b *testing.B) {
 	}
 
 	quota := throttled.RateQuota{
-		MaxRate:  throttled.PerSec(100),
-		MaxBurst: 100,
+		MaxRate:  throttled.PerSec(RatePerSec),
+		MaxBurst: BurstSize,
 	}
 	limiter, err := throttled.NewGCRARateLimiterCtx(store, quota)
 	if err != nil {

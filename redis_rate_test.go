@@ -34,7 +34,7 @@ func BenchmarkRedisRate(b *testing.B) {
 	})
 	_ = rdb.FlushDB(ctx).Err()
 
-	quota := redis_rate.PerSecond(100)
+	quota := redis_rate.PerSecond(RatePerSec)
 	limiter := redis_rate.NewLimiter(rdb)
 
 	counter := struct {
