@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"sync"
 	"testing"
 
@@ -12,7 +11,7 @@ import (
 func Benchmark(b *testing.B) {
 	store, err := memstore.NewCtx(65536)
 	if err != nil {
-		log.Fatal(err)
+		b.Fatal(err)
 	}
 
 	quota := throttled.RateQuota{
@@ -21,7 +20,7 @@ func Benchmark(b *testing.B) {
 	}
 	rateLimiter, err := throttled.NewGCRARateLimiterCtx(store, quota)
 	if err != nil {
-		log.Fatal(err)
+		b.Fatal(err)
 	}
 
 	counter := struct {
