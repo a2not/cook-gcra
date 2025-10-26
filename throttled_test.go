@@ -8,7 +8,7 @@ import (
 	"github.com/throttled/throttled/v2/store/memstore"
 )
 
-func Benchmark(b *testing.B) {
+func BenchmarkThrottled(b *testing.B) {
 	store, err := memstore.NewCtx(65536)
 	if err != nil {
 		b.Fatal(err)
@@ -18,7 +18,7 @@ func Benchmark(b *testing.B) {
 		MaxRate:  throttled.PerSec(100),
 		MaxBurst: 100,
 	}
-	rateLimiter, err := throttled.NewGCRARateLimiterCtx(store, quota)
+	limiter, err := throttled.NewGCRARateLimiterCtx(store, quota)
 	if err != nil {
 		b.Fatal(err)
 	}
@@ -29,10 +29,11 @@ func Benchmark(b *testing.B) {
 	}{}
 
 	for b.Loop() {
-		limited, _, err := rateLimiter.RateLimitCtx(b.Context(), "key", 1)
+		limited, _, err := limiter.RateLimitCtx(b.Context(), "key", 1)
 		if err != nil {
 			b.Fatal(err)
 		}
+
 		if !limited {
 			counter.mutex.Lock()
 			counter.count++
